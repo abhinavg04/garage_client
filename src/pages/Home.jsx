@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
 import { getCustomer } from '../ApiServices/allApis'
+import {Link} from 'react-router-dom'
 
 function Home() {
     const [customerData,setCustomerdata]=useState([])
@@ -20,9 +21,10 @@ function Home() {
         const pMonth = month.toString().padStart(2,"0");
         const pDay = date.toString().padStart(2,"0");
         const cdate=`${year}-${pMonth}-${pDay}`
+        console.log(cdate);
 
-        const res = customers?.filter(item => item.added_date == cdate)
-        console.log(result)
+        const res = customers?.filter(item => item.added_data == cdate)
+        console.log(res)
         setCustomerdata(res)
     }
 
@@ -37,24 +39,26 @@ function Home() {
                     <th>Customer Name</th>
                     <th>Phone Number</th>
                     <th>Vehicle Number</th>
-                    <th>Services</th>
-                    <th>Notes</th>
-                    <th>Amount</th>
                     <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Roshan</td>
-                    <td>8338112233</td>
-                    <td>KL 11 AG 1</td>
-                    <td>Oil Change</td>
-                    <td>Use Premium</td>
-                    <td>1000</td>
-                    <td>Pending...<i className="fa-solid fa-clock" /></td>
-                    <td></td>
-                </tr>
+                {
+                    customerData.length > 0 ?
+                    customerData.map(item => (
+                        <tr>
+                            <td>{item.customer}</td>
+                            <td>{item.phone}</td>
+                            <td>{item.vehicle_number}</td>
+                            <td>{item.status}</td>
+                            <td> <Link className='btn btn-outline-light' style={{backgroundColor:'red'}} to={'/service'}>Services</Link></td>
+                        </tr>
+                        ))
+                :
+                <h3 className='text-danger text-center'>No customers available</h3>
+                }
+                
             </tbody>
 
              
