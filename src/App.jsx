@@ -7,19 +7,21 @@ import { Routes,Route } from 'react-router-dom'
 import './App.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
   return (
     <>
     <Header/>
-    <h1>Garage</h1>
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/customer' element={<Customer/>}/>
       <Route path='/service/:id' element={<Service/>}/>
     </Routes>
     <Footer/>
+    <ToastContainer/>
     </>
   )
 }
