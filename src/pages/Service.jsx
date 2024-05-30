@@ -1,20 +1,26 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import { Row,Col } from 'react-bootstrap'
 import AddService from '../components/AddService'
 import { useParams } from 'react-router-dom'
 import { getSpecificCustomer } from '../ApiServices/allApis'
+import { addService } from '../ApiServices/allApis'
+import { addServiceResponseContext } from '../ContextApi/CustomerContext'
 
 function Service() {
-
+  const {addServiceResponse}=useContext(addServiceResponseContext)
   const {id}=useParams()
   const [customer,setCustomers]= useState({})
 
   useEffect(()=>{
     getData()
-  },[])
+  },[addServiceResponse])
 
   const getData= async()=>{
-    const result= await getSpecificCustomer(id)
+    const header={
+      "Content-Type":"application/json",
+      "Authorization":`Token ${sessionStorage.getItem('token')} `
+  }
+    const result= await getSpecificCustomer(id,header)
     if (result.status == 200){
       setCustomers(result.data)
     }
@@ -34,7 +40,7 @@ function Service() {
         </div>
         <Row>
           <Col sm={6} md={2}>
-            <AddService/>
+            <AddService id={id}/>
           </Col>
           <Col sm={6} md={10}>
             <table className='table table-info table-bordered'>

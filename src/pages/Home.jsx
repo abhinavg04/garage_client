@@ -1,16 +1,22 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
 import { getCustomer } from '../ApiServices/allApis'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 
 function Home() {
     const [customerData,setCustomerdata]=useState([])
     useEffect(()=>{
         getData()
     },[])
+    const nav=useNavigate()
 
     const getData=async()=>{
-        const result=await getCustomer()
+
+        const header={
+            "Content-Type":"application/json",
+            "Authorization":`Token ${sessionStorage.getItem('token')} `
+        }
+        const result=await getCustomer(header)
         const customers = result.data
         console.log(customers)
 
@@ -27,12 +33,23 @@ function Home() {
         console.log(res)
         setCustomerdata(res)
     }
+    const logout=()=>{
+        nav('/')
+        sessionStorage.removeItem('token')
+    }
 
 
 
   return (
     <>
         <h2 className='text-center text-warning'>Today's Chart</h2>
+        <div className='d-flex justify-content-between'>
+        <Link className='btn btn-outline-light' style={{backgroundColor:'green'}} to={'/customer'}>
+            Customer{''}
+            <i className="fa-solid fa-arrow-right" />
+          </Link>
+          <button className='btn btn-danger' onClick={logout}>LogOut</button>
+        </div>
         <table className='table table-dark table-bordered shadow mt-5'>
             <thead>
                 <tr>
@@ -52,7 +69,7 @@ function Home() {
                             <td>{item.phone}</td>
                             <td>{item.vehicle_number}</td>
                             <td>{item.status}</td>
-                            <td> <Link className='btn btn-outline-light' style={{backgroundColor:'red'}} to={'/service'}>Services</Link></td>
+                            <td> <Link className='btn btn-outline-light' style={{backgroundColor:'red'}} to={`/service/${item.id}`}>Services</Link></td>
                         </tr>
                         ))
                 :
