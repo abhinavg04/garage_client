@@ -20,5 +20,5 @@ export const userRegister=async(data)=>{
     return await commonApi("",data,`${base_url}/user/`,"POST")
 }
 export const getToken=async(data)=>{
-    return await commonApi("",data,`${base_url}/token`,"POST")
+    return await commonApi("",data,`${base_url}/token/`,"POST")
 }
